@@ -1,33 +1,67 @@
 <div class="login-page d-flex align-items-center justify-content-center vh-100">
   <div class="login-card text-center p-5 shadow-lg">
-
+    @if (isLoginMode){
     <h1 class="text-white mb-2">Login</h1>
-    <p class="text-white-50 mb-4">Have an account?</p>
 
     <div class="mb-3">
       <input type="text" pInputText [(ngModel)]="email" placeholder="Username or email" class="custom-input w-100" />
     </div>
 
     <div class="mb-4 position-relative">
-      <input type="password" pInputText [(ngModel)]="password" placeholder="Password" class="custom-input w-100" />
-      <i class="pi pi-eye position-absolute end-0 top-50 translate-middle-y me-3 text-white-50"></i>
+      <input #passwordInput type="password" pInputText [(ngModel)]="password" placeholder="Password" class="custom-input w-100" />
+      <i class="pi pi-eye absolute right-0 top-50 translate-middle-y me-3 text-white-50"
+       style="cursor: pointer;"
+       (click)="togglePassword(passwordInput)">
+    </i>
+    </div>
+    <p-button label="SIGN IN" (click)="login()" styleClass="w-50 custom-btn mb-4"></p-button>
+
+    <p class="text-white mb-3 small">you don't have an account?</p>
+
+    <div >
+      <p-button label="Register" (click)="register()" styleClass="w-50 custom-btn mb-4"></p-button>
+    </div>
+  }
+  @else {
+    <h1 class="text-white mb-2">Register</h1>
+    <p class="text-white-50 mb-4">Sign up to get started</p>
+    <div class="mb-3">
+                <input type="text" pInputText placeholder="First name" class="custom-input w-100">
+    </div>
+    <div class="mb-3">
+                <input type="text" pInputText placeholder="middle name" class="custom-input w-100">
+    </div>
+    <div class="mb-3">
+                <input type="text" pInputText placeholder="last name" class="custom-input w-100">
+    </div>
+    <div class="mb-3">
+                <input type="text" pInputText placeholder="username" class="custom-input w-100">
+    </div>
+    <div class="mb-3">
+                <input type="text" pInputText placeholder="email" class="custom-input w-100">
+    </div>
+    <div class="mb-4 position-relative">
+    <input #passwordInput type="password" pInputText placeholder="Password" class="custom-input w-100">
+
+    <i class="pi pi-eye absolute right-0 top-50 translate-middle-y me-3 text-white-50"
+       style="cursor: pointer;"
+       (click)="togglePassword(passwordInput)">
+    </i>
     </div>
 
-    <p-button label="SIGN IN" (click)="login()" styleClass="w-100 custom-btn mb-4"></p-button>
+    <div class="mb-4 position-relative">
 
-    <div class="d-flex justify-content-between text-white-50 mb-4 small">
-      <div class="d-flex align-items-center">
-        <p-checkbox [binary]="true" label="Remember Me" class="me-2"></p-checkbox>
-      </div>
-      <a href="#" class="text-white text-decoration-none">Forgot Password</a>
+    <input #confirmInput type="password" pInputText placeholder="Confirm your password" class="custom-input w-100">
+
+    <i class="pi pi-eye absolute right-0 top-50 translate-middle-y me-3 text-white-50"
+       style="cursor: pointer;"
+       (click)="togglePassword(confirmInput)">
+    </i>
     </div>
 
-    <p class="text-white mb-3 small">— Or Sign In With —</p>
-
-    <div class="d-flex gap-3">
-      <p-button label="Facebook" styleClass="p-button-secondary w-100 bg-white text-dark border-none"></p-button>
-      <p-button label="Twitter" styleClass="p-button-secondary w-100 bg-white text-dark border-none"></p-button>
+    <div >
+      <p-button label="Register" styleClass="w-50 custom-btn mb-4"></p-button>
     </div>
-
+  }
   </div>
 </div>

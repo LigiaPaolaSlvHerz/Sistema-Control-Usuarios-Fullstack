@@ -5,7 +5,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from "../../services/auth.service";
 import { Router } from '@angular/router';
-
+import { ViewChild, ElementRef } from '@angular/core';
 @Component({
   selector: 'app-inicio',
   standalone: true,
@@ -18,6 +18,9 @@ import { Router } from '@angular/router';
 export class InicioPage {
   email: string = '';
   password: string = '';
+  isLoginMode: boolean = true;
+  @ViewChild('passwordInput') passwordInput!: ElementRef;
+  showPassword = false
   constructor(
     private authService: AuthService,
     private router: Router
@@ -40,5 +43,15 @@ login() {
       console.error('Error login', err);
     }
   });
+}
+register(){
+  this.isLoginMode = false;
+}
+showLogin() {
+  this.isLoginMode = true;
+}
+togglePassword(input: HTMLInputElement) {
+  input.type = input.type === 'password' ? 'text' : 'password';
+  this.showPassword = !this.showPassword;
 }
 }

@@ -17,5 +17,5 @@ import { DrawerModule } from 'primeng/drawer';
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent {
-  // Por ahora sin lógica, como pediste, ingeniera.
+
 }
