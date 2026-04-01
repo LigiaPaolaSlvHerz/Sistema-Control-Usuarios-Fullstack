@@ -1,0 +1,17 @@
+.layout-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.layout-sidebar {
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 70px);
+}
+
+/* Para que los links se vean azules cuando estés en esa página */
+.router-link-active {
+    background-color: var(--primary-color-faded, #e3f2fd) !important;
+    color: var(--primary-color, #2196f3) !important;
+}
