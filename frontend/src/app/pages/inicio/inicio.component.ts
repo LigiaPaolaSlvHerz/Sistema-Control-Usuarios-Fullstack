@@ -18,6 +18,11 @@ import { ViewChild, ElementRef } from '@angular/core';
 export class InicioPage {
   email: string = '';
   password: string = '';
+  firstName: string = '';
+  middleName: string = '';
+  lastName: string = '';
+  username: string = '';
+  confirmPassword: string = '';
   isLoginMode: boolean = true;
   @ViewChild('passwordInput') passwordInput!: ElementRef;
   showPassword = false
@@ -46,6 +51,24 @@ login() {
 }
 register(){
   this.isLoginMode = false;
+}
+registerUser() {
+  const registerData = {
+    first_name: this.firstName,
+    middle_name: this.middleName,
+    last_name: this.lastName,
+    username: this.username,
+    email: this.email, // Ya la tenías del login
+    password: this.password // Ya la tenías del login
+  };
+
+  this.authService.register(registerData).subscribe({
+    next: (res) => {
+      console.log('¡Registro exitoso!', res);
+      this.isLoginMode = true; // Regresa al login automáticamente tras registrarse
+    },
+    error: (err) => console.error('Error al registrar', err)
+  });
 }
 showLogin() {
   this.isLoginMode = true;

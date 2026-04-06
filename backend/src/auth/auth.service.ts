@@ -34,4 +34,8 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
+  async register(userData: any) {
+  // Aquí llamas a tu otro servicio que ya está configurado
+  return await this.usersService.create(userData);
+  }
 }

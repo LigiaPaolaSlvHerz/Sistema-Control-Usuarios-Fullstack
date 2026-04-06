@@ -12,5 +12,9 @@ export class AuthService {
 
   login(data: any) {
     return this.http.post(`${this.API}/login`, data);
+
+  }
+  register(userData: any) {
+  return this.http.post(`${this.API}/register`, userData);
   }
 }

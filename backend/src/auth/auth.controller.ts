@@ -10,4 +10,8 @@ export class AuthController {
     const identifier = body.email || body.username;
     return this.authService.login(identifier, body.password);
   }
+  @Post('register')
+  async register(@Body() createUserDto: any) {
+  return this.authService.register(createUserDto);
+}
 }
