@@ -11,12 +11,23 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  // async create(data: any) {
-  //   data.password = await bcrypt.hash(data.password, 10);
-  //   const user = this.userRepository.create(data);
-  //   return await this.userRepository.save(user);
-  // }
   async create(data: any) {
+
+    if (!data.email || !data.username || !data.password) {
+    throw new Error('Todos los campos son obligatorios, Pao');
+  }
+
+    const existingUser = await this.userRepository.findOne({
+    where: [
+      { email: data.email },
+      { username: data.username }
+    ]
+  });
+
+  
+  if (existingUser) {
+    throw new Error('Email o Username ya están registrados');
+  }
   const hashedPassword = await bcrypt.hash(data.password, 10);
   const newUser = this.userRepository.create({
     ...data,

@@ -26,22 +26,22 @@
     <h1 class="text-white mb-2">Register</h1>
     <p class="text-white-50 mb-4">Sign up to get started</p>
     <div class="mb-3">
-                <input type="text" pInputText placeholder="First name" class="custom-input w-100">
+                <input type="text" pInputText [(ngModel)]="firstName" placeholder="First name" class="custom-input w-100">
     </div>
     <div class="mb-3">
-                <input type="text" pInputText placeholder="middle name" class="custom-input w-100">
+                <input type="text" pInputText [(ngModel)]="middleName" placeholder="middle name" class="custom-input w-100">
     </div>
     <div class="mb-3">
-                <input type="text" pInputText placeholder="last name" class="custom-input w-100">
+                <input type="text" pInputText [(ngModel)]="lastName" placeholder="last name" class="custom-input w-100">
     </div>
     <div class="mb-3">
-                <input type="text" pInputText placeholder="username" class="custom-input w-100">
+                <input type="text" pInputText [(ngModel)]="username" placeholder="username" class="custom-input w-100">
     </div>
     <div class="mb-3">
-                <input type="text" pInputText placeholder="email" class="custom-input w-100">
+                <input type="text" pInputText [(ngModel)]="email" placeholder="email" class="custom-input w-100">
     </div>
     <div class="mb-4 position-relative">
-    <input #passwordInput type="password" pInputText placeholder="Password" class="custom-input w-100">
+    <input #passwordInput type="password" pInputText [(ngModel)]="password" placeholder="Password" class="custom-input w-100">
 
     <i class="pi pi-eye absolute right-0 top-50 translate-middle-y me-3 text-white-50"
        style="cursor: pointer;"
@@ -51,7 +51,7 @@
 
     <div class="mb-4 position-relative">
 
-    <input #confirmInput type="password" pInputText placeholder="Confirm your password" class="custom-input w-100">
+    <input #confirmInput type="password" pInputText [(ngModel)]="confirmPassword" placeholder="Confirm your password" class="custom-input w-100">
 
     <i class="pi pi-eye absolute right-0 top-50 translate-middle-y me-3 text-white-50"
        style="cursor: pointer;"
@@ -60,7 +60,7 @@
     </div>
 
     <div >
-      <p-button label="Register" styleClass="w-50 custom-btn mb-4"></p-button>
+      <p-button label="Register" (click)="registerUser()" styleClass="w-50 custom-btn mb-4"></p-button>
     </div>
   }
   </div>

@@ -53,13 +53,19 @@ register(){
   this.isLoginMode = false;
 }
 registerUser() {
+
+  if (this.password !== this.confirmPassword) {
+    alert('Las contraseñas no coinciden');
+    return;
+  }
+
   const registerData = {
     first_name: this.firstName,
     middle_name: this.middleName,
     last_name: this.lastName,
     username: this.username,
-    email: this.email, // Ya la tenías del login
-    password: this.password // Ya la tenías del login
+    email: this.email,
+    password: this.password
   };
 
   this.authService.register(registerData).subscribe({
