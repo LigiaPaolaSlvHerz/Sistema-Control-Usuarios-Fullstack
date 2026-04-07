@@ -8,10 +8,41 @@
     position: sticky;
     top: 70px;
     height: calc(100vh - 70px);
+    background-color: var(--verde-segiagua) !important;
+    color: white !important;
 }
 
-/* Para que los links se vean azules cuando estés en esa página */
 .router-link-active {
     background-color: var(--primary-color-faded, #e3f2fd) !important;
     color: var(--primary-color, #2196f3) !important;
+}
+:host {
+  --verde-segiagua: #006b54;
+  --naranja-login: #ff9800;
+  --fondo-claro: #f4f7f6;
+}
+.avatar-circle {
+  background-color: white !important;
+  color: var(--verde-segiagua) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+.user-name-text {
+  color: white !important;
+}
+.full-name-text {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.menu-item {
+  color: white !important;
+  border-radius: 8px;
+  margin: 5px 0;
+  transition: 0.3s;
+}
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+
+.layout-main-content {
+  background-color: var(--fondo-claro) !important;
 }

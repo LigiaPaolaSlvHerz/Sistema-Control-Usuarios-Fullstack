@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { InicioPage } from './pages/inicio/inicio.component';
 import { PrincipalPage } from './pages/principal/principal.component';
 import { LayoutComponent } from './layout/layout.component';
+import { gestionUsuariosPage } from './pages/gestionUsuarios/gestionUsuarios.component';
 
 
 export const routes: Routes = [
@@ -17,6 +18,10 @@ export const routes: Routes = [
       {
       path: 'principal',
       component: PrincipalPage,
+      },
+      {
+      path: 'usuarios',
+      component: gestionUsuariosPage,
       },
     ]
   },

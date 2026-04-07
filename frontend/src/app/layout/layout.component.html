@@ -1,9 +1,13 @@
 <div class="layout-wrapper flex flex-column min-h-screen">
 
-    <div class="layout-topbar flex align-items-center justify-content-between px-4 shadow-2 surface-card" style="height: 70px;">
+    <div class="layout-topbar flex align-items-center justify-content-between px-4 surface-card" style="border-bottom: 3px solid var(--naranja-login);">
         <div class="flex align-items-center">
-            <i class="pi pi-bars text-2xl cursor-pointer mr-3 lg:hidden"></i>
-            <span class="text-xl font-bold text-primary">Panel de Control</span>
+            <!-- <i class="pi pi-bars text-2xl cursor-pointer mr-3 lg:hidden"></i> -->
+            <div class="flex align-items-center p-4 border-bottom-1 surface-border gap-3">
+                <img src="/logosegiaguag.png" alt="Logo" style="width: 40px; border-radius: 8px;">
+                <span class="font-bold text-xl vertical-align-middle">SEGIAGUA</span>
+            </div>
+
         </div>
 
         <div class="flex align-items-center gap-3">
@@ -15,9 +19,22 @@
     <div class="flex flex-row flex-grow-1">
 
         <div class="layout-sidebar surface-section shadow-1 flex flex-column w-18rem hidden lg:flex">
-            <div class="flex align-items-center p-4 border-bottom-1 surface-border gap-3">
-                <img src="assets/imagen/logo.png" alt="Logo" style="width: 40px; border-radius: 8px;">
-                <span class="font-bold text-xl vertical-align-middle">SEGIAGUA</span>
+            <div class="flex align-items-center p-3 border-bottom-1 surface-border">
+              <div class="avatar-circle flex align-items-center justify-content-center border-circle font-bold mr-3"
+             style="width: 48px; height: 48px;">
+                {{ userInitial }}
+              </div>
+
+              <div class="flex flex-column">
+                <span class="font-bold text-xl text-primary line-height-2">
+                  {{ userName }}
+                </span>
+
+                <span class="text-sm text-slate-500 white-space-nowrap overflow-hidden text-overflow-ellipsis"
+                      style="max-width: 150px;">
+                  {{ fullName }}
+                </span>
+              </div>
             </div>
 
             <div class="p-3 flex-grow-1">

@@ -40,8 +40,10 @@ login() {
   this.authService.login(data).subscribe({
     next: (res: any) => {
       console.log('TOKEN:', res.access_token);
+      console.log('USER DATA:', res.user);
 
       localStorage.setItem('token', res.access_token);
+      localStorage.setItem('user', JSON.stringify(res.user));
       this.router.navigate(['/principal']);
     },
     error: (err) => {
