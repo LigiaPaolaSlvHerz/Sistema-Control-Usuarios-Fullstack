@@ -32,17 +32,21 @@
 .full-name-text {
   color: rgba(255, 255, 255, 0.7) !important;
 }
-.menu-item {
-  color: white !important;
-  border-radius: 8px;
-  margin: 5px 0;
-  transition: 0.3s;
-}
-.menu-item:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-}
+
 
 
 .layout-main-content {
   background-color: var(--fondo-claro) !important;
+}
+/* Esto afectará a los iconos de PrimeIcons (pi) */
+.menu-item i {
+  color: #ffffff !important; /* Negro puro */
+  font-weight: bold;         /* Para que se vean con más cuerpo */
+  font-size: 1.2rem;         /* Un pelín más grandes si quieres */
+}
+
+/* También para el texto del menú si lo quieres negro */
+.menu-item span {
+  color: #ffffff !important;
+  font-weight: 500;
 }

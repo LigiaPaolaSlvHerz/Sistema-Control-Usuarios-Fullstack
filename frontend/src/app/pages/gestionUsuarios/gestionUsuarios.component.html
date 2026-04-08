@@ -1,13 +1,67 @@
-<div class="bg-slate-100 overflow-y-scroll w-screen h-screen antialiased text-slate-300 selection:bg-blue-600 selection:text-white">
-    <div class="flex flex-col relative w-screen">
+<div class="card p-4">
+    <h2 class="text-center text-orange-600 font-bold mb-4">Administración de Usuarios</h2>
 
+    <p-table
+        #dt
+        [value]="usuarios"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['username', 'nombre', 'apellido_p', 'rol']"
+        styleClass="p-datatable-gridlines p-datatable-striped"
+        [tableStyle]="{ 'min-width': '75rem' }"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width:12%">Usuario</th>
+                <th style="width:15%">Nombre</th>
+                <th style="width:15%">Apellido Paterno</th>
+                <th style="width:15%">Apellido Materno</th>
+                <th style="width:12%">Rol</th>
+                <th style="width:12%">Estatus</th>
+                <th style="width:19%">Acciones</th>
+            </tr>
+            <tr>
+                <th><p-columnFilter type="text" field="username" placeholder="Buscar"></p-columnFilter></th>
+                <th><p-columnFilter type="text" field="nombre" placeholder="Buscar"></p-columnFilter></th>
+                <th><p-columnFilter type="text" field="apellido_p" placeholder="Buscar"></p-columnFilter></th>
+                <th><p-columnFilter type="text" field="apellido_m" placeholder="Buscar"></p-columnFilter></th>
+                <th><p-columnFilter type="text" field="rol" placeholder="Buscar"></p-columnFilter></th>
+                <th>
+                    <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-select [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Estatus" [showClear]="true">
+                                <ng-template let-option pTemplate="item">
+                                    <p-tag [value]="option.label" [severity]="getSeverity(option.value)"></p-tag>
+                                </ng-template>
+                            </p-select>
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
 
-      <h1 class="text-slate-800 mb-2">Usuarios</h1>
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.nombre }}</td>
+                <td>{{ user.apellido_p }}</td>
+                <td>{{ user.apellido_m }}</td>
+                <td>{{ user.rol }}</td>
+                <td>
+                    <p-tag [value]="user.status | uppercase" [severity]="getSeverity(user.status)"></p-tag>
+                </td>
+                <td class="text-center">
+                    <p-button icon="pi pi-pencil" [rounded]="true" severity="warn" [outlined]="true" class="mr-2" label="Editar"></p-button>
+                    <p-button icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" label="Eliminar"></p-button>
+                </td>
+            </tr>
+        </ng-template>
 
-
-      <div class="ml-[220px] px-4 flex flex-col flex-1  h-full text-slate-800">
-        <router-outlet />
-      </div>
-
-    </div>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="7" class="text-center p-4">No se encontraron registros de usuarios para SEGIAGUA.</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
