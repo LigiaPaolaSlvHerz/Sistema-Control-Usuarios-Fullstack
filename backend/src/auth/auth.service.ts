@@ -42,7 +42,11 @@ export class AuthService {
     };
   }
   async register(userData: any) {
+    const newUserWithRole = {
+      ...userData,
+      role_id: 8 
+    };
   // Aquí llamas a tu otro servicio que ya está configurado
-  return await this.usersService.create(userData);
+  return await this.usersService.create(newUserWithRole);
   }
 }

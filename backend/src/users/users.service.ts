@@ -14,7 +14,7 @@ export class UsersService {
   async create(data: any) {
 
     if (!data.email || !data.username || !data.password) {
-    throw new Error('Todos los campos son obligatorios, Pao');
+    throw new Error('Todos los campos son obligatorios');
   }
 
     const existingUser = await this.userRepository.findOne({
@@ -42,6 +42,7 @@ export class UsersService {
   findAll() {
     return this.userRepository.find({
     withDeleted: true,
+    relations: ['role'],
     });
   }
 
