@@ -34,7 +34,12 @@ export class UsersService {
     password: hashedPassword
   });
   const savedUser = await this.userRepository.save(newUser);
-  (savedUser as any).created_by = (savedUser as any).id;
+
+  if (!data.created_by) {
+      (savedUser as any).created_by = (savedUser as any).id;
+    } else {
+      (savedUser as any).created_by = data.created_by;
+    }
   return await this.userRepository.save(savedUser);
   }
 
@@ -42,7 +47,7 @@ export class UsersService {
   findAll() {
     return this.userRepository.find({
     withDeleted: true,
-    relations: ['role'],
+     relations: ['role'],
     });
   }
 

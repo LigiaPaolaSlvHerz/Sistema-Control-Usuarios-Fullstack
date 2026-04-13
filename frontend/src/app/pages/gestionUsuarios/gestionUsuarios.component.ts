@@ -11,6 +11,8 @@ import { SelectModule } from 'primeng/select';
 import { ButtonModule } from "primeng/button";
 import { UsuarioService } from '../../services/usuario.service';
 import { DialogModule } from 'primeng/dialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-gestion-usuarios',
@@ -26,7 +28,8 @@ import { DialogModule } from 'primeng/dialog';
     MultiSelectModule,
     SelectModule,
     ButtonModule,
-    DialogModule
+    DialogModule,
+    ConfirmDialogModule
 ],
   templateUrl: './gestionUsuarios.component.html',
   styleUrls: ['./gestionUsuarios.component.css']
@@ -34,6 +37,7 @@ import { DialogModule } from 'primeng/dialog';
 export class gestionUsuariosPage implements OnInit {
 
   private usuarioService = inject(UsuarioService);
+  private confirmationService = inject(ConfirmationService);
 
   usuarios: any[] = [];
   representatives: any[] = [];
@@ -50,6 +54,8 @@ export class gestionUsuariosPage implements OnInit {
     password: '',
     role_id: null
   };
+  isEditMode: boolean = false; // Nos dice si es edición o creación
+  usuarioIdAEditar: number | null = null; // Guarda el ID de a quién editamos
 
   ngOnInit() {
 
@@ -68,10 +74,12 @@ export class gestionUsuariosPage implements OnInit {
       next: (data) => {
         // 3. Mapeamos los datos de NestJS (snake_case) a tu tabla (camelCase)
         this.usuarios = data.map(u => ({
+          id: u.id,
           username: u.username,
           nombre: u.first_name,      // Viene de tu user.entity.ts
           apellido_p: u.middle_name,   // Viene de tu user.entity.ts
           apellido_m: u.last_name, // Viene de tu user.entity.ts
+          email: u.email,
           rol: u.role?.role || 'Sin Rol', // Si incluiste la relación en el backend
           status: u.active ? 'activo' : 'inactivo'
         }));
@@ -96,6 +104,8 @@ export class gestionUsuariosPage implements OnInit {
   }
   // 1. Abrir el diálogo
   showDialog() {
+    this.isEditMode = false;
+    this.limpiarFormulario();
     this.display = true;
   }
 
@@ -107,6 +117,22 @@ export class gestionUsuariosPage implements OnInit {
       error: (err) => console.error('Error al cargar roles', err)
     });
   }
+  editarUsuario(user: any) {
+  this.isEditMode = true;
+  this.usuarioIdAEditar = user.id;
+  this.display = true; // Abre el modal igual que cuando agregas uno nuevo
+
+  // Ponemos los datos de la tabla en el formulario
+  this.nuevoUsuario = {
+    first_name: user.nombre,
+    middle_name: user.apellido_p,
+    last_name: user.apellido_m,
+    username: user.username,
+    email: user.email,
+    role_id: this.rolesDisponibles.find(r => r.role === user.rol)?.id,
+    password: '' // Se queda vacío por seguridad
+  };
+}
 
   // 3. Guardar el usuario con el ID del administrador logueado
   guardarUsuario() {
@@ -114,10 +140,22 @@ export class gestionUsuariosPage implements OnInit {
     const userLogueado = JSON.parse(localStorage.getItem('user') || '{}');
     const adminId = userLogueado.id;
 
-    if (!adminId) {
-      console.error('No se encontró el ID del administrador');
-      return;
-    }
+    if (this.isEditMode) {
+    // --- LÓGICA DE EDITAR ---
+    console.log('Intentando actualizar al ID:', this.usuarioIdAEditar);
+    const dataAEnviar = { ...this.nuevoUsuario, updated_by: adminId };
+
+    this.usuarioService.updateUsuario(this.usuarioIdAEditar!, dataAEnviar).subscribe({
+      next: (res) => {
+        console.log('Servidor respondió OK:', res);
+        this.display = false;
+        this.obtenerUsuariosDeBase();
+        this.limpiarFormulario();
+      },
+      error: (err) => console.error('Error al editar', err)
+    });
+
+  } else {
 
     // Agregamos el created_by al objeto antes de enviarlo
     const dataAEnviar = {
@@ -134,9 +172,33 @@ export class gestionUsuariosPage implements OnInit {
       },
       error: (err) => console.error('Error al crear usuario', err)
     });
+    }
   }
 
   limpiarFormulario() {
     this.nuevoUsuario = { first_name: '', middle_name: '', last_name: '', username: '', email: '', password: '', role_id: null };
   }
+
+  confirmarEliminacion(user: any) {
+        this.confirmationService.confirm({
+            message: `¿Estás seguro de que deseas eliminar a ${user.nombre}?`,
+            header: 'Confirmar Eliminación',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Sí, eliminar',
+            rejectLabel: 'No, cancelar',
+            rejectButtonStyleClass: 'p-button-text',
+            accept: () => {
+                this.eliminarUsuario(user.id);
+            }
+        });
+    }
+    eliminarUsuario(id: number) {
+        this.usuarioService.removeUsuario(id).subscribe({
+            next: () => {
+                console.log('Usuario eliminado');
+                this.obtenerUsuariosDeBase(); // Recargamos la tabla
+            },
+            error: (err) => console.error('Error al eliminar:', err)
+        });
+    }
 }

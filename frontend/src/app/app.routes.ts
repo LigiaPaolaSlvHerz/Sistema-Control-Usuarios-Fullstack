@@ -3,6 +3,7 @@ import { InicioPage } from './pages/inicio/inicio.component';
 import { PrincipalPage } from './pages/principal/principal.component';
 import { LayoutComponent } from './layout/layout.component';
 import { gestionUsuariosPage } from './pages/gestionUsuarios/gestionUsuarios.component';
+import { gestionRolesPage } from './pages/gestionRoles/gestionRoles.component';
 
 
 export const routes: Routes = [
@@ -22,6 +23,10 @@ export const routes: Routes = [
       {
       path: 'usuarios',
       component: gestionUsuariosPage,
+      },
+      {
+      path: 'roles',
+      component: gestionRolesPage,
       },
     ]
   },

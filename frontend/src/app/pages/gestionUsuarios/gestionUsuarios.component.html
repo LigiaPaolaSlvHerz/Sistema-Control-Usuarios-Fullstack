@@ -4,8 +4,6 @@
         <p-button label="Nuevo Usuario" icon="pi pi-user-plus" severity="success" (onClick)="showDialog()"></p-button>
     </div>
 
-    <p-table ...> </p-table>
-
     <p-dialog header="Registrar Nuevo Usuario" [(visible)]="display" [modal]="true" [style]="{ width: '30vw' }">
         <div class="flex flex-column gap-3">
             <input pInputText placeholder="Nombre" [(ngModel)]="nuevoUsuario.first_name" />
@@ -15,22 +13,30 @@
             <input pInputText placeholder="Email" [(ngModel)]="nuevoUsuario.email" />
             <input pInputText type="password" placeholder="Password" [(ngModel)]="nuevoUsuario.password" />
 
-            <p-select [options]="rolesDisponibles" [(ngModel)]="nuevoUsuario.role_id" optionLabel="role" optionValue="id" placeholder="Seleccionar Rol"></p-select>
+            <p-select [options]="rolesDisponibles" [(ngModel)]="nuevoUsuario.role_id" optionLabel="role" optionValue="id" placeholder="Seleccionar Rol" appendTo="body"></p-select>
 
             <div class="flex justify-content-end mt-2">
                 <p-button label="Guardar" icon="pi pi-check" (onClick)="guardarUsuario()"></p-button>
             </div>
         </div>
     </p-dialog>
-    <p-table
-        #dt
-        [value]="usuarios"
-        [rows]="10"
-        [paginator]="true"
-        [globalFilterFields]="['username', 'nombre', 'apellido_p', 'rol']"
-        styleClass="p-datatable-gridlines p-datatable-striped"
-        [tableStyle]="{ 'min-width': '75rem' }"
-    >
+    <div style="width: 100%; overflow-x: auto;">
+      <p-table
+          #dt
+          [value]="usuarios"
+          [rows]="4"
+          [paginator]="true"
+          [rowsPerPageOptions]="[5, 10, 20]"
+          [globalFilterFields]="['username', 'nombre', 'apellido_p', 'rol']"
+          [scrollable]="true"
+          scrollHeight="flex"
+          scrollDirection="horizontal"
+          styleClass="p-datatable-gridlines p-datatable-striped"
+          [tableStyle]="{ 'min-width': '60rem' }"
+          responsiveLayout="scroll"
+          [breakpoint]="'960px'"
+      >
+
         <ng-template pTemplate="header">
             <tr>
                 <th style="width:12%">Usuario</th>
@@ -50,7 +56,7 @@
                 <th>
                     <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                            <p-select [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Estatus" [showClear]="true">
+                            <p-select [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Estatus" [showClear]="true" appendTo="body">
                                 <ng-template let-option pTemplate="item">
                                     <p-tag [value]="option.label" [severity]="getSeverity(option.value)"></p-tag>
                                 </ng-template>
@@ -73,8 +79,9 @@
                     <p-tag [value]="user.status | uppercase" [severity]="getSeverity(user.status)"></p-tag>
                 </td>
                 <td class="text-center">
-                    <p-button icon="pi pi-pencil" [rounded]="true" severity="warn" [outlined]="true" class="mr-2" label="Editar"></p-button>
-                    <p-button icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" label="Eliminar"></p-button>
+                    <p-button icon="pi pi-pencil" [rounded]="true" severity="warn" [outlined]="true" class="mr-2" label="Editar" (onClick)="editarUsuario(user)"></p-button>
+                    <p-button icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" label="Eliminar" (onClick)="confirmarEliminacion(user)"></p-button>
+                    <p-confirmDialog></p-confirmDialog>
                 </td>
             </tr>
         </ng-template>
@@ -85,4 +92,5 @@
             </tr>
         </ng-template>
     </p-table>
+    </div>
 </div>
