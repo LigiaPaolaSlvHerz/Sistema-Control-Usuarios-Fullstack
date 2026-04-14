@@ -1,0 +1,73 @@
+<div class="card p-4">
+    <h2 class="text-center text-orange-600 font-bold mb-4">Administración de Permisos</h2>
+
+    <div class="flex justify-content-end mb-3">
+        <p-button label="Nuevo Permiso" icon="pi pi-plus" severity="success" (onClick)="showDialog()"></p-button>
+    </div>
+
+    <p-dialog [header]="isEditMode ? 'Editar Permiso' : 'Registrar Nuevo Permiso'" [(visible)]="display" [modal]="true" [style]="{ width: '30vw' }">
+        <div class="flex flex-column gap-3">
+            <label class="font-bold">Nombre del Permiso</label>
+            <input pInputText placeholder="Ej. CREATE_USER" [(ngModel)]="nuevoPermiso.permission" />
+
+            <label class="font-bold">Descripción</label>
+            <input pInputText placeholder="Para qué sirve este permiso..." [(ngModel)]="nuevoPermiso.description" />
+
+            <div class="flex justify-content-end mt-2">
+                <p-button [label]="isEditMode ? 'Actualizar' : 'Guardar'" icon="pi pi-check" (onClick)="guardarPermiso()"></p-button>
+            </div>
+        </div>
+    </p-dialog>
+
+    <div style="width: 100%; overflow-x: auto;">
+        <p-table
+            #dt
+            [value]="permisos"
+            [rows]="5"
+            [paginator]="true"
+            [globalFilterFields]="['nombre', 'descripcion']"
+            styleClass="p-datatable-gridlines p-datatable-striped"
+            [tableStyle]="{ 'min-width': '50rem' }"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 10%">ID</th>
+                    <th style="width: 30%">Permiso</th>
+                    <th style="width: 30%">Descripción</th>
+                    <th style="width: 15%">Estatus</th>
+                    <th style="width: 15%" class="text-center">Acciones</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th><p-columnFilter type="text" field="nombre" placeholder="Buscar"></p-columnFilter></th>
+                    <th><p-columnFilter type="text" field="descripcion" placeholder="Buscar"></p-columnFilter></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-permiso>
+                <tr>
+                    <td>{{ permiso.id }}</td>
+                    <td><span class="font-bold text-primary">{{ permiso.nombre }}</span></td>
+                    <td>{{ permiso.descripcion }}</td>
+                    <td>
+                        <p-tag [value]="permiso.status | uppercase" [severity]="getSeverity(permiso.status)"></p-tag>
+                    </td>
+                    <td class="text-center">
+                        <p-button icon="pi pi-pencil" [rounded]="true" severity="warn" [outlined]="true" class="mr-2" (onClick)="editarPermiso(permiso)"></p-button>
+                        <p-button icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" (onClick)="confirmarEliminacion(permiso)"></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="5" class="text-center p-4">No se encontraron registros de permisos para SEGIAGUA.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-confirmDialog></p-confirmDialog>

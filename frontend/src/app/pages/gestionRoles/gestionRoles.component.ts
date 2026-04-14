@@ -13,6 +13,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-gestion-roles',
@@ -29,7 +30,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     SelectModule,
     ButtonModule,
     DialogModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    CheckboxModule
 ],
   templateUrl: './gestionRoles.component.html',
   styleUrls: ['./gestionRoles.component.css']
@@ -46,12 +48,16 @@ export class gestionRolesPage implements OnInit {
   rolIdAEditar: number | null = null;
   nuevoRol: any = {
     role: '',
+    permisos: [],
     active: true
   };
+  permisosDisponibles: any[] = [];
 
   ngOnInit() {
 
     this.obtenerRolesDeBase();
+    this.obtenerRolesDeBase();
+    this.cargarPermisos();
   }
 
   obtenerRolesDeBase() {
@@ -136,6 +142,9 @@ export class gestionRolesPage implements OnInit {
       message: `¿Estás seguro de que deseas eliminar el rol ${rol.role}?`,
       header: 'Confirmar Eliminación',
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí, eliminar',
+      rejectLabel: 'No, cancelar',
+      rejectButtonStyleClass: 'p-button-text',
       accept: () => {
         this.eliminarRol(rol.id);
       }
@@ -147,6 +156,14 @@ export class gestionRolesPage implements OnInit {
         this.obtenerRolesDeBase();
       },
       error: (err) => console.error('Error al eliminar rol', err)
+    });
+  }
+  cargarPermisos() {
+    this.usuarioService.getPermisos().subscribe({
+      next: (res) => {
+        this.permisosDisponibles = res;
+      },
+      error: (err) => console.error('No pude cargar los permisos:', err)
     });
   }
 }

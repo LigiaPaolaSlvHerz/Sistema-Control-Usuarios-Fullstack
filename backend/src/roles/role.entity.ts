@@ -34,7 +34,7 @@ export class Role {
   @OneToMany(() => User, (user) => user.role)
   users: User[];
 
-  @ManyToMany(() => Permission)
+  @ManyToMany(() => Permission, (permission) => permission.roles, { cascade: true })
   @JoinTable({
     name: 'role_has_permissions',
     joinColumn: { name: 'role_id', referencedColumnName: 'id' },

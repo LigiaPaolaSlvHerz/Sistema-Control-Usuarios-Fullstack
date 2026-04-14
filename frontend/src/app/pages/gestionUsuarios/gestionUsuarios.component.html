@@ -81,7 +81,7 @@
                 <td class="text-center">
                     <p-button icon="pi pi-pencil" [rounded]="true" severity="warn" [outlined]="true" class="mr-2" label="Editar" (onClick)="editarUsuario(user)"></p-button>
                     <p-button icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" label="Eliminar" (onClick)="confirmarEliminacion(user)"></p-button>
-                    <p-confirmDialog></p-confirmDialog>
+
                 </td>
             </tr>
         </ng-template>
@@ -94,3 +94,4 @@
     </p-table>
     </div>
 </div>
+<p-confirmDialog></p-confirmDialog>

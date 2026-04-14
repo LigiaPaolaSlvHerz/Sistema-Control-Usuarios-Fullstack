@@ -44,4 +44,21 @@ export class UsuarioService {
   removeRol(id: number): Observable<any> {
     return this.http.delete(`http://localhost:3000/roles/${id}`);
   }
+  getPermisos(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:3000/permissions');
+  }
+
+  createPermission(data: any): Observable<any> {
+    return this.http.post('http://localhost:3000/permissions', data);
+  }
+
+  updatePermission(id: number, data: any): Observable<any> {
+    return this.http.patch(`http://localhost:3000/permissions/${id}`, data);
+  }
+
+  deletePermission(id: number): Observable<any> {
+    return this.http.delete(`http://localhost:3000/permissions/${id}`);
+
+  }
+
 }
