@@ -21,7 +21,9 @@ export class RolesService {
 }
 
   findAll() {
-    return this.roleRepository.find();
+    return this.roleRepository.find({
+    relations: ['permissions'] 
+  });
   }
 
   findOne(id: number) {

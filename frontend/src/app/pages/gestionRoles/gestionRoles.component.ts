@@ -52,6 +52,8 @@ export class gestionRolesPage implements OnInit {
     active: true
   };
   permisosDisponibles: any[] = [];
+  displayPermisos: boolean = false;
+  rolSeleccionado: any = null;
 
   ngOnInit() {
 
@@ -65,10 +67,12 @@ export class gestionRolesPage implements OnInit {
     this.usuarioService.getRoles().subscribe({
       next: (data) => {
         // Mapeamos los campos que vienen de tu base de datos de roles
+        console.log('Datos que llegan de SEGIAGUA:', data);
         this.roles = data.map(r => ({
           id: r.id,
           role: r.role,
-          status: r.active ? 'activo' : 'inactivo'
+          status: r.active ? 'activo' : 'inactivo',
+          permissions: r.permissions || []
         }));
         this.loading = false;
       },
@@ -91,9 +95,12 @@ export class gestionRolesPage implements OnInit {
     this.rolIdAEditar = rol.id;
     this.display = true;
 
+    const permisosIds = rol.permissions ? rol.permissions.map((p: any) => p.id) : [];
+
     this.nuevoRol = {
       role: rol.role,
-      active: rol.status === 'activo'
+      active: rol.status === 'activo',
+      permisos: permisosIds
     };
   }
   getSeverity(status: string) {
@@ -166,4 +173,9 @@ export class gestionRolesPage implements OnInit {
       error: (err) => console.error('No pude cargar los permisos:', err)
     });
   }
+  verPermisos(rol: any) {
+    this.rolSeleccionado = rol;
+    this.displayPermisos = true;
+  }
+
 }
