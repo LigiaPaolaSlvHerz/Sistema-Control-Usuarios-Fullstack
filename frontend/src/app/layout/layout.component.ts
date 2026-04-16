@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { AuthService } from '../services/auth.service';
 import { DrawerModule } from 'primeng/drawer';
 @Component({
   selector: 'app-layout',
@@ -19,6 +20,7 @@ export class LayoutComponent {
   userName: string = 'User';
   fullName: string = 'Full Name';
   userInitial: string = 'U';
+  private authService = inject(AuthService);
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -30,5 +32,8 @@ export class LayoutComponent {
       this.userInitial = user.username.charAt(0).toUpperCase();
     }
 
+  }
+  cerrarSesion() {
+    this.authService.logout();
   }
 }

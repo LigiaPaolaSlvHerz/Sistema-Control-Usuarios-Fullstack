@@ -13,6 +13,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-gestion-usuarios',
@@ -29,8 +30,10 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     SelectModule,
     ButtonModule,
     DialogModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ToastModule
 ],
+  providers: [MessageService],
   templateUrl: './gestionUsuarios.component.html',
   styleUrls: ['./gestionUsuarios.component.css']
 })
@@ -38,6 +41,7 @@ export class gestionUsuariosPage implements OnInit {
 
   private usuarioService = inject(UsuarioService);
   private confirmationService = inject(ConfirmationService);
+  private messageService = inject(MessageService);
 
   usuarios: any[] = [];
   representatives: any[] = [];
@@ -147,6 +151,11 @@ export class gestionUsuariosPage implements OnInit {
 
     this.usuarioService.updateUsuario(this.usuarioIdAEditar!, dataAEnviar).subscribe({
       next: (res) => {
+        this.messageService.add({
+        severity: 'info',
+        summary: 'Actualizado',
+        detail: 'Los datos del usuario se actualizaron'
+        });
         console.log('Servidor respondió OK:', res);
         this.display = false;
         this.obtenerUsuariosDeBase();
@@ -165,6 +174,12 @@ export class gestionUsuariosPage implements OnInit {
 
     this.usuarioService.crearUsuario(dataAEnviar).subscribe({
       next: (res) => {
+        this.messageService.add({
+        severity: 'success',
+        summary: '¡Éxito!',
+        detail: 'Usuario creado correctamente',
+        life: 3000 // 3000 milisegundos = se quita solo en 3 segundos
+        });
         console.log('¡Usuario creado con éxito!');
         this.display = false; // Cerramos el modal
         this.obtenerUsuariosDeBase(); // Recargamos la tabla
@@ -195,6 +210,11 @@ export class gestionUsuariosPage implements OnInit {
     eliminarUsuario(id: number) {
         this.usuarioService.removeUsuario(id).subscribe({
             next: () => {
+                this.messageService.add({
+                  severity: 'warn',
+                  summary: 'Eliminado',
+                  detail: 'El usuario fue removido del sistema'
+                });
                 console.log('Usuario eliminado');
                 this.obtenerUsuariosDeBase(); // Recargamos la tabla
             },

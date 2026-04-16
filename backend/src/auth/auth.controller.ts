@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -13,5 +13,13 @@ export class AuthController {
   @Post('register')
   async register(@Body() createUserDto: any) {
   return this.authService.register(createUserDto);
-}
+  }
+  @Post('refresh')
+  refreshTokens(@Body() body: { refresh_token: string }) {
+    if (!body.refresh_token) {
+      // Un pequeño filtro por si Angular manda vacío el campo
+      throw new UnauthorizedException('Se requiere el refresh token');
+    }
+    return this.authService.refresh(body.refresh_token);
+  }
 }

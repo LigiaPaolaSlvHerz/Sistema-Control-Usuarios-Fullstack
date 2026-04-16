@@ -9,7 +9,6 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
-
   async login(identifier: string, password: string) {
     const user = await this.usersService.findOneByLogin(identifier);
 
@@ -29,9 +28,13 @@ export class AuthService {
       throw new UnauthorizedException('Password incorrecto');
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, role: user.role.role };
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' }); 
+
+    const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: accessToken,
+      refresh_token: refreshToken,
       user: {
         id: user.id,
         username: user.username,
@@ -49,4 +52,22 @@ export class AuthService {
   // Aquí llamas a tu otro servicio que ya está configurado
   return await this.usersService.create(newUserWithRole);
   }
+  async refresh(refreshToken: string) {
+    try {
+      // Verificamos que el refresh token sea válido y no haya expirado de esos 7 días
+      const payload = this.jwtService.verify(refreshToken);
+
+      // Si es válido, sacamos los datos y creamos un Access Token nuevecito
+      const newPayload = { sub: payload.sub, email: payload.email };
+      
+      return {
+        access_token: this.jwtService.sign(newPayload, { expiresIn: '15m' }),
+        // Opcional: podrías devolver también un refresh token nuevo aquí si quieres
+      };
+    } catch (e) {
+      // Si el refresh token expiró o es inventado, lo botamos
+      throw new UnauthorizedException('Refresh token inválido o expirado. Vuelve a iniciar sesión.');
+    }
+  }
+
 }

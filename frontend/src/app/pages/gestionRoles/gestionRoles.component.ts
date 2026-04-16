@@ -14,6 +14,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-gestion-roles',
@@ -31,8 +32,10 @@ import { CheckboxModule } from 'primeng/checkbox';
     ButtonModule,
     DialogModule,
     ConfirmDialogModule,
-    CheckboxModule
+    CheckboxModule,
+    ToastModule
 ],
+  providers: [MessageService],
   templateUrl: './gestionRoles.component.html',
   styleUrls: ['./gestionRoles.component.css']
 })
@@ -40,6 +43,7 @@ export class gestionRolesPage implements OnInit {
 
   private usuarioService = inject(UsuarioService);
   private confirmationService = inject(ConfirmationService);
+  private messageService = inject(MessageService);
 
   roles: any[] = [];
   loading: boolean = false;
@@ -116,17 +120,28 @@ export class gestionRolesPage implements OnInit {
 
   guardarRol() {
     if (this.isEditMode) {
-      // Lógica para actualizar (necesitas crear updateRol en tu servicio)
+      // Lógica para actualizar un rol
       this.usuarioService.updateRol(this.rolIdAEditar!, this.nuevoRol).subscribe({
         next: () => {
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Actualizado',
+            detail: 'Los datos del rol se actualizaron'
+          });
           this.finalizarAccion();
         },
         error: (err) => console.error('Error al editar rol', err)
       });
     } else {
-      // Lógica para crear (necesitas crear crearRol en tu servicio)
+      // Lógica para crear un rol
       this.usuarioService.crearRol(this.nuevoRol).subscribe({
         next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: '¡Éxito!',
+            detail: 'Rol creado correctamente',
+            life: 3000
+          });
           this.finalizarAccion();
         },
         error: (err) => console.error('Error al crear rol', err)
@@ -160,6 +175,11 @@ export class gestionRolesPage implements OnInit {
   eliminarRol(id: number) {
     this.usuarioService.removeRol(id).subscribe({
       next: () => {
+        this.messageService.add({
+            severity: 'warn',
+            summary: 'Eliminado',
+            detail: 'El rol fue removido del sistema'
+          });
         this.obtenerRolesDeBase();
       },
       error: (err) => console.error('Error al eliminar rol', err)

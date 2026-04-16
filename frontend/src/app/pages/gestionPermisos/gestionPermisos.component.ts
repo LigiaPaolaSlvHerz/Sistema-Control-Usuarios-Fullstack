@@ -13,6 +13,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-gestion-permisos',
@@ -29,8 +30,10 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     SelectModule,
     ButtonModule,
     DialogModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ToastModule
 ],
+  providers: [MessageService],
   templateUrl: './gestionPermisos.component.html',
   styleUrls: ['./gestionPermisos.component.css']
 })
@@ -38,6 +41,7 @@ export class gestionPermisosPage implements OnInit {
 
   private permisoService = inject(UsuarioService);
   private confirmationService = inject(ConfirmationService);
+  private messageService = inject(MessageService);
 
   permisos: any[] = [];
   loading: boolean = false;
@@ -108,12 +112,27 @@ export class gestionPermisosPage implements OnInit {
 
     if (this.isEditMode) {
       this.permisoService.updatePermission(this.permisoIdAEditar!, { ...this.nuevoPermiso, updated_by: adminId }).subscribe({
-        next: () => this.finalizarAccion(),
+        next: () => {
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Actualizado',
+            detail: 'Los datos del permiso se actualizaron'
+          });
+          this.finalizarAccion();
+        },
         error: (err) => console.error('Error al editar permiso', err)
       });
     } else {
       this.permisoService.createPermission({ ...this.nuevoPermiso, created_by: adminId }).subscribe({
-        next: () => this.finalizarAccion(),
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: '¡Éxito!',
+            detail: 'Permiso creado correctamente',
+            life: 3000
+          });
+        this.finalizarAccion();
+        },
         error: (err) => console.error('Error al crear permiso', err)
       });
     }
@@ -136,7 +155,14 @@ export class gestionPermisosPage implements OnInit {
     icon: 'pi pi-exclamation-triangle',
     accept: () => {
       this.permisoService.deletePermission(permiso.id).subscribe({
-        next: () => this.finalizarAccion(),
+        next: () => {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Eliminado',
+            detail: 'El permiso fue removido del sistema'
+          });
+          this.finalizarAccion();
+        },
         error: (err: any) => console.error('Error al eliminar', err)
       });
     }

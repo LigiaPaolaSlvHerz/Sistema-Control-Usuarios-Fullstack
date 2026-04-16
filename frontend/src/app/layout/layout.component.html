@@ -12,7 +12,7 @@
 
         <div class="flex align-items-center gap-3">
             <p-button icon="pi pi-bell" [rounded]="true" [text]="true" severity="secondary"></p-button>
-            <p-button label="Salir" icon="pi pi-sign-out" severity="danger" [outlined]="true" size="small"></p-button>
+            <p-button (click)="cerrarSesion()" label="Salir" icon="pi pi-sign-out" severity="danger" [outlined]="true" size="small"></p-button>
         </div>
     </div>
 
