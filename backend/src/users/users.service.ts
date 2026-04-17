@@ -72,6 +72,9 @@ export class UsersService {
   return this.userRepository.findOne({ where: [
       { email: loginTerm, active: true },
       { username: loginTerm, active: true }
-  ]});
+  ],
+  relations: ['role']
+
+});
 }
 }

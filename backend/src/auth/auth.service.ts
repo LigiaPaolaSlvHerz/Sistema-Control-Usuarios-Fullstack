@@ -9,6 +9,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
+  //Metodo Login
   async login(identifier: string, password: string) {
     const user = await this.usersService.findOneByLogin(identifier);
 
