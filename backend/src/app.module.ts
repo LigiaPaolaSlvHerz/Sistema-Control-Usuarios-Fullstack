@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { AuthModule } from './auth/auth.module';
+import { MunicipalitiesModule } from './municipalities/municipalities.module';
+import { SettlementModule } from './settlement/settlement.module';
 
 @Module({
   imports: [
@@ -21,13 +23,15 @@ import { AuthModule } from './auth/auth.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
       }),
     }),
     UsersModule,
     RolesModule,
     PermissionsModule,
     AuthModule,
+    MunicipalitiesModule,
+    SettlementModule,
   ],
 })
 export class AppModule {}
