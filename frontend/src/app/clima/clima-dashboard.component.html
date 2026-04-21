@@ -5,23 +5,31 @@
     <div class="col-12 md:col-6">
       <label>Selecciona Alcaldía</label>
       <p-dropdown [options]="alcaldias" [(ngModel)]="alcaldiaSeleccionada"
-                  optionLabel="municipality" placeholder="Elegir alcaldía"
-                  (onChange)="onAlcaldiaChange()">
+                  optionLabel="municipality" placeholder="Seleccionar alcaldía"
+                  (onChange)="onAlcaldiaChange()" styleClass="w-full">
       </p-dropdown>
     </div>
 
     <div class="col-12 md:col-6">
       <label>Selecciona Colonia</label>
       <p-dropdown [options]="colonias" [(ngModel)]="coloniaSeleccionada"
-                  optionLabel="settlement" placeholder="Elegir colonia"
-                  [disabled]="!colonias.length">
+                  optionLabel="settlement" placeholder="Seleccionar colonia"
+                  [disabled]="!colonias.length" styleClass="w-full"
+                  (onChange)="onColoniaChange()">
       </p-dropdown>
     </div>
   </div>
 
-  <div class="mt-4">
-     <p>
-       Coordenadas: {{coloniaSeleccionada.latitude}}, {{coloniaSeleccionada.longitude}}
-     </p>
-  </div>
+  @if (coloniaSeleccionada) {
+    <div class="mt-4">
+      <p>Coordenadas: {{coloniaSeleccionada.latitude}}, {{coloniaSeleccionada.longitude}}</p>
+    </div>
+  }
+  <div style="display: block; width: 100%; height: 400px;">
+  <canvas baseChart
+    [data]="lineChartData"
+    [options]="lineChartOptions"
+    [type]="'line'">
+  </canvas>
+</div>
 </div>
