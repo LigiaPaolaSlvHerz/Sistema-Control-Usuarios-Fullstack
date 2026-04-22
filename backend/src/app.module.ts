@@ -7,6 +7,7 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { AuthModule } from './auth/auth.module';
 import { MunicipalitiesModule } from './municipalities/municipalities.module';
 import { SettlementModule } from './settlement/settlement.module';
+import { ClimaModule } from './clima/clima.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { SettlementModule } from './settlement/settlement.module';
     AuthModule,
     MunicipalitiesModule,
     SettlementModule,
+    ClimaModule,
   ],
 })
 export class AppModule {}

@@ -21,10 +21,11 @@ export class ClimaDashboardComponent implements OnInit {
 
     alcaldiaSeleccionada: any;
     coloniaSeleccionada: any;
+
     public lineChartData: ChartConfiguration['data'] = {
-    datasets: [],
-    labels: []
-  };
+      datasets: [],
+      labels: []
+    };
 
   public lineChartOptions: ChartOptions = {
     responsive: true,
@@ -34,6 +35,33 @@ export class ClimaDashboardComponent implements OnInit {
       y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Humedad (%)' } }
     }
   };
+
+  // Gráfica 2: Weather Code (Barras)
+public weatherCodeChartData: ChartConfiguration['data'] = { datasets: [], labels: [] };
+public weatherCodeChartOptions: ChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: { y: { beginAtZero: true, max: 100, title: { display: true, text: 'Código WMO' } } }
+};
+
+// Gráfica 3: Probabilidad (Área suave)
+public probabilidadChartData: ChartConfiguration['data'] = { datasets: [], labels: [] };
+public probabilidadChartOptions: ChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: { y: { min: 0, max: 100, title: { display: true, text: '%' } } }
+};
+
+// Gráfica 4: Lluvia y Chubascos (Barras Apiladas)
+public lluviaChartData: ChartConfiguration['data'] = { datasets: [], labels: [] };
+public lluviaChartOptions: ChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    x: { },
+    y: { beginAtZero: true, title: { display: true, text: 'mm' } }
+  }
+};
 
   ngOnInit() {
     // 1. Cargamos las alcaldías al iniciar
@@ -55,7 +83,7 @@ export class ClimaDashboardComponent implements OnInit {
     if (this.coloniaSeleccionada) {
       const { latitude, longitude } = this.coloniaSeleccionada;
 
-      this.weatherService.getWeatherData(latitude, longitude).subscribe(data => {
+      this.weatherService.getWeatherData(latitude, longitude).subscribe((data: any) => {
         console.log('Datos del clima recibidos:', data);
 
         // Aquí es donde "alimentaremos" a la gráfica
@@ -64,8 +92,11 @@ export class ClimaDashboardComponent implements OnInit {
     }
   }
   prepararGrafica(datosHorarios: any) {
-  // 1. Cortamos los datos para mostrar solo las próximas 24 horas (opcional pero recomendado)
-  const labels = datosHorarios.time.slice(0, 24).map((t: string) => t.split('T')[1]);
+    //
+    const labels = datosHorarios.time.slice(0, 24).map((t: any) => {
+      return new Date(t).toLocaleTimeString('es-MX', {
+        hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
+    });
   const temps = datosHorarios.temperature_2m.slice(0, 24);
   const humedad = datosHorarios.relative_humidity_2m.slice(0, 24);
   const probabilidadPresipitacion = datosHorarios.precipitation_probability.slice(0, 24);
@@ -100,16 +131,48 @@ export class ClimaDashboardComponent implements OnInit {
       }
     ]
   };
-  this.lineChartData = {
+  const codes = (datosHorarios.weather_code || []).slice(0, 24);
+  this.weatherCodeChartData = {
+    labels: labels,
+    datasets: [{
+      data: codes,
+      label: 'Estado del Cielo',
+      // Mapeamos: si el código es alto (tormenta), el gris es más oscuro
+      backgroundColor: codes.map((c: number) => c > 50 ? '#4b5563' : '#9ca3af'),
+      borderRadius: 5
+    }]
+  };
+  this.probabilidadChartData = {
+    labels: labels,
+    datasets: [{
+      data: datosHorarios.precipitation_probability.slice(0, 24),
+      label: 'Probabilidad %',
+      borderColor: '#fbbf24', // Amarillo/Naranja
+      backgroundColor: 'rgba(251, 191, 36, 0.3)',
+      fill: true,
+      tension: 0.4
+    }]
+  };
+  const rain = (datosHorarios.rain || []).slice(0, 24);
+  const showers = (datosHorarios.showers || []).slice(0, 24);
+  this.lluviaChartData = {
     labels: labels,
     datasets: [
       {
-        data: probabilidadPresipitacion,
-        label: 'Probabilidad ',
-        yAxisID: 'y',
-        borderColor: '#ff8800'
+        data: rain,
+        label: 'Lluvia (mm)',
+        backgroundColor: 'rgba(96, 165, 250, 0.2)', // Color con transparencia
+        fill: true, // Esto la convierte en gráfica de área
+        tension: 0.4 // Suaviza la línea
+      },
+      {
+        data: showers,
+        label: 'Chubascos (mm)',
+        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+      fill: true,
+      tension: 0.4
       }
     ]
-  }
+  };
 }
 }

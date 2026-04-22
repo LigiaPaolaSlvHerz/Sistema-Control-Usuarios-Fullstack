@@ -1,6 +1,7 @@
 // weather.service.ts
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class WeatherService {
@@ -14,10 +15,9 @@ export class WeatherService {
   getSettlements(municipalityId: number) {
     return this.http.get<any[]>(`${this.API}/settlements/by-municipality/${municipalityId}`);
   }
-  getWeatherData(lat: number, lon: number) {
-  // Usamos backticks (`) para meter las variables lat y lon en la URL
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relative_humidity_2m,precipitation_probability&timezone=auto`;
-  return this.http.get<any>(url);
-  }
+  getWeatherData(lat: number, lon: number): Observable<any> {
+  // Ahora apuntas a tu propio servidor de NestJS
+  return this.http.get(`http://localhost:3000/clima/pronostico?lat=${lat}&lon=${lon}`);
+}
 
 }
