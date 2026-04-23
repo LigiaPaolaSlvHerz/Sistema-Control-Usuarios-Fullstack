@@ -36,7 +36,7 @@ export class ClimaDashboardComponent implements OnInit {
     }
   };
 
-  // Gráfica 2: Weather Code (Barras)
+  //Weather Code
 public weatherCodeChartData: ChartConfiguration['data'] = { datasets: [], labels: [] };
 public weatherCodeChartOptions: ChartOptions = {
   responsive: true,
@@ -44,19 +44,49 @@ public weatherCodeChartOptions: ChartOptions = {
   scales: { y: { beginAtZero: true, max: 100, title: { display: true, text: 'Código WMO' } } }
 };
 
-// Gráfica 3: Probabilidad (Área suave)
+//Probabilidad
 public probabilidadChartData: ChartConfiguration['data'] = { datasets: [], labels: [] };
 public probabilidadChartOptions: ChartOptions = {
   responsive: true,
   maintainAspectRatio: false,
-  scales: { y: { min: 0, max: 100, title: { display: true, text: '%' } } }
+  layout: {
+    padding: {
+      right: 30,  // Esto le da 30 pixeles de espacio a la derecha
+      left: 10,   // Un poquito a la izquierda también por si las dudas
+      top: 10,
+      bottom: 10
+    }
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      position: 'left',
+      max: 100, // La probabilidad siempre es de 0 a 100
+      title: { display: true, text: 'Probabilidad (%)' }
+    },
+    y1: {
+      beginAtZero: true,
+      position: 'right',
+      title: { display: true, text: 'Presipitacion (mm)' },
+      grid: {
+        drawOnChartArea: false
+      }
+    }
+  }
 };
-
-// Gráfica 4: Lluvia y Chubascos (Barras Apiladas)
+//Lluvia y showers
 public lluviaChartData: ChartConfiguration['data'] = { datasets: [], labels: [] };
 public lluviaChartOptions: ChartOptions = {
   responsive: true,
   maintainAspectRatio: false,
+  layout: {
+    padding: {
+      right: 30,  // Esto le da 30 pixeles de espacio a la derecha
+      left: 10,   // Un poquito a la izquierda también por si las dudas
+      top: 10,
+      bottom: 10
+    }
+  },
   scales: {
     x: { },
     y: { beginAtZero: true, title: { display: true, text: 'mm' } }
@@ -95,11 +125,10 @@ public lluviaChartOptions: ChartOptions = {
     //
     const labels = datosHorarios.time.slice(0, 24).map((t: any) => {
       return new Date(t).toLocaleTimeString('es-MX', {
-        hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
+        hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' });
     });
   const temps = datosHorarios.temperature_2m.slice(0, 24);
   const humedad = datosHorarios.relative_humidity_2m.slice(0, 24);
-  const probabilidadPresipitacion = datosHorarios.precipitation_probability.slice(0, 24);
 
   this.lineChartData = {
     labels: labels,
@@ -137,22 +166,35 @@ public lluviaChartOptions: ChartOptions = {
     datasets: [{
       data: codes,
       label: 'Estado del Cielo',
-      // Mapeamos: si el código es alto (tormenta), el gris es más oscuro
-      backgroundColor: codes.map((c: number) => c > 50 ? '#4b5563' : '#9ca3af'),
+      // Mientras nubes hay mas obscuro se vuelve
+      backgroundColor: codes.map((c: number) => c > 50 ? '#5e05a7' : '#c76efa'),
       borderRadius: 5
     }]
   };
+
   this.probabilidadChartData = {
-    labels: labels,
-    datasets: [{
-      data: datosHorarios.precipitation_probability.slice(0, 24),
-      label: 'Probabilidad %',
-      borderColor: '#fbbf24', // Amarillo/Naranja
+  labels: labels,
+  datasets: [
+    {
+      data: (datosHorarios.precipitation_probability|| []).slice(0, 24),
+      label: 'Probabilidad',
+      borderColor: '#fbbf24', // Amarillo
       backgroundColor: 'rgba(251, 191, 36, 0.3)',
       fill: true,
-      tension: 0.4
-    }]
-  };
+      tension: 0.4,
+      yAxisID: 'y' // Eje normal a la izquierda
+    },
+    {
+      data: (datosHorarios.precipitation|| []).slice(0, 24),
+      label: 'Precipitación',
+      borderColor: '#60a5fa', // Azul claro
+      backgroundColor: 'rgba(96, 165, 250, 0.3)',
+      fill: true,
+      tension: 0.4,
+      yAxisID: 'y1' // <--- Eje nuevo a la derecha
+    }
+  ]
+};
   const rain = (datosHorarios.rain || []).slice(0, 24);
   const showers = (datosHorarios.showers || []).slice(0, 24);
   this.lluviaChartData = {
@@ -161,14 +203,14 @@ public lluviaChartOptions: ChartOptions = {
       {
         data: rain,
         label: 'Lluvia (mm)',
-        backgroundColor: 'rgba(96, 165, 250, 0.2)', // Color con transparencia
+        backgroundColor: 'rgba(0, 195, 255)', // Color
         fill: true, // Esto la convierte en gráfica de área
         tension: 0.4 // Suaviza la línea
       },
       {
         data: showers,
-        label: 'Chubascos (mm)',
-        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+        label: 'Showers (mm)',
+        backgroundColor: 'rgba(25, 255, 243)',
       fill: true,
       tension: 0.4
       }

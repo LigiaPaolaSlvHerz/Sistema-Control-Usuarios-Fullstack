@@ -8,7 +8,7 @@ export class ClimaService {
     const params = {
       "latitude": lat,
       "longitude": lon,
-      "hourly": ["temperature_2m", "relative_humidity_2m", "precipitation_probability", "weather_code", "rain", "showers"],
+      "hourly": ["temperature_2m", "relative_humidity_2m", "precipitation_probability", "weather_code", "rain", "showers", "precipitation"],
       "timezone": "auto",
       "forecast_days": 1,
       "past_days":0
@@ -33,6 +33,7 @@ export class ClimaService {
         weather_code: Array.from(hourly.variables(3)!.valuesArray()!),
         rain: Array.from(hourly.variables(4)!.valuesArray()!),
         showers: Array.from(hourly.variables(5)!.valuesArray()!),
+        precipitation: Array.from(hourly.variables(6)!.valuesArray()!),
       }
     };
   }
