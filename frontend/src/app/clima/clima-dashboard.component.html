@@ -1,4 +1,4 @@
-<div class="bg-white shadow-lg rounded-xl p-5 mb-8 mx-4" style="overflow: visible;">
+<div class="bg-white shadow-lg rounded-xl p-5 mb-8 mx-4" style="overflow: hidden;">
   <h3>🌦️ Monitor de Clima SEGIAGUA</h3>
 
   <div class="grid m-0">
@@ -26,6 +26,56 @@
     </div>
   } -->
   <!-- class="bg-white p-4 shadow-lg rounded-xl flex flex-col h-[400px]" -->
+<div class="grid justify-content-center m-0 mt-4 p-0 overflow-visible">
+
+  <div class="col-12 lg:col-10 xl:col-8"> <div class="grid">
+
+      <div class="col-12 md:col-6 p-2">
+        <div class="bg-white p-4 shadow-lg rounded-xl h-full flex flex-column md:flex-row items-center justify-center gap-3 text-center md:text-left">
+          <div class="text-5xl md:text-7xl" style="line-height: 1;">{{ iconoActual }}</div>
+
+          <div class="flex flex-column items-start text-left">
+            <div class="text-4xl md:text-6xl font-bold text-slate-900 leading-tight">
+              {{temperaturaActual}}<span class="text-4xl text-gray-500 font-normal">°C</span>
+            </div>
+            <p class="text-lg text-gray-600 m-0 font-medium">{{ estadoCieloTexto }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6 p-2 flex flex-column gap-2">
+
+          <div class="bg-white p-2 shadow-lg rounded-xl flex flex-column md:flex-row items-start md:items-center justify-content-between px-3">
+              <div class="flex items-center gap-2">
+                  <span class="pi pi-filter text-blue-500" style="font-size: 1rem"></span>
+                  <span class="text-sm text-gray-600 font-semibold">Humedad</span>
+              </div>
+              <div class="text-xl font-bold text-slate-800">{{ humedadActual }}%</div>
+          </div>
+
+          <div class="bg-white p-2 shadow-lg rounded-xl flex flex-column md:flex-row items-start md:items-center justify-content-between px-3">
+              <div class="flex items-center gap-2">
+                  <span class="pi pi-cloud text-gray-400" style="font-size: 1rem"></span>
+                  <span class="text-sm text-gray-600 font-semibold">Nubosidad</span>
+              </div>
+              <div class="text-xl font-bold text-slate-800">{{ nubosidadActual }}%</div>
+          </div>
+
+          <div class="bg-white p-2 shadow-lg rounded-xl flex flex-column gap-1 px-3">
+              <div class="flex items-center gap-2">
+                  <span class="pi pi-umbrella text-purple-500" style="font-size: 1rem"></span>
+                  <span class="text-sm text-gray-600 font-semibold">Pronóstico</span>
+              </div>
+              <div class="text-sm font-semibold text-slate-800 leading-tight"
+                  [class.text-red-500]="esProbabilidadAlta">
+                  {{ mensajePronostico }} {{ horaPicoLluvia }}
+              </div>
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
   <div class="grid mt-4">
     <div class="col-12 md:col-6">
       <div class="chart-card bg-white p-4 shadow-lg rounded-xl">

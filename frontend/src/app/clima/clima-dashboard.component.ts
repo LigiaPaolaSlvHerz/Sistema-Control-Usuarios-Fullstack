@@ -21,7 +21,8 @@ export class ClimaDashboardComponent implements OnInit {
 
     alcaldiaSeleccionada: any;
     coloniaSeleccionada: any;
-
+    public mensajePronostico: string = '';
+    public esProbabilidadAlta: boolean = false;
     public lineChartData: ChartConfiguration['data'] = {
       datasets: [],
       labels: []
@@ -51,8 +52,8 @@ public probabilidadChartOptions: ChartOptions = {
   maintainAspectRatio: false,
   layout: {
     padding: {
-      right: 30,  // Esto le da 30 pixeles de espacio a la derecha
-      left: 10,   // Un poquito a la izquierda también por si las dudas
+      right: 30,
+      left: 10,
       top: 10,
       bottom: 10
     }
@@ -121,8 +122,72 @@ public lluviaChartOptions: ChartOptions = {
       });
     }
   }
+  public humedadActual: number = 0;
+  public nubosidadActual: number = 0;
+  public temperaturaActual: number = 0;
+  public horaPicoLluvia: string = '--:--';
+  public estadoCieloTexto: string = 'Cargando...';
+  public iconoActual: string = '☀️';
+
+  mapearClima(code: number) {
+    if (code === 0) {
+      this.estadoCieloTexto = 'Cielo Despejado';
+      this.iconoActual = '☀️';
+    } else if (code >= 1 && code <= 3) {
+      this.estadoCieloTexto = 'Nubes Dispersas';
+      this.iconoActual = '🌤️';
+    } else if (code >= 45 && code <= 48) {
+      this.estadoCieloTexto = 'Niebla';
+      this.iconoActual = '🌫️';
+    } else if (code >= 51 && code <= 65) {
+      this.estadoCieloTexto = 'Lluvia / Llovizna';
+      this.iconoActual = '🌧️';
+    } else if (code >= 95) {
+      this.estadoCieloTexto = 'Tormenta';
+      this.iconoActual = '⚡';
+    } else {
+      this.estadoCieloTexto = 'Nublado';
+      this.iconoActual = '☁️';
+    }
+  }
+
+
   prepararGrafica(datosHorarios: any) {
     //
+    const ahora = new Date();
+    const horaActual = ahora.getHours();
+    const probabilidades = datosHorarios.precipitation_probability;
+    const maxProb = Math.max(...probabilidades);
+    const indiceMax = probabilidades.indexOf(maxProb);
+    const horaPico = indiceMax.toString().padStart(2, '0') + ':00';
+    const code = datosHorarios.weather_code[horaActual];
+    this.mapearClima(code);
+
+    //Logica del pronostico
+    if (maxProb > 50) {
+        this.mensajePronostico = `Alta probabilidad de lluvia a las ${horaPico}`;
+        this.esProbabilidadAlta = true;
+        this.horaPicoLluvia = horaPico;
+    } else if (maxProb > 10) {
+        this.mensajePronostico = `Poca probabilidad de lluvia hoy (${maxProb}%)`;
+        this.esProbabilidadAlta = false;
+        this.horaPicoLluvia = horaPico;
+    } else {
+        this.mensajePronostico = `No hay probabilidad de lluvia hoy`;
+        this.esProbabilidadAlta = false;
+        this.horaPicoLluvia = '--:--';
+    }
+    // Si encontramos la hora, guardamos la humedad de ese momento
+    if (datosHorarios.relative_humidity_2m[horaActual] !== undefined) {
+        this.humedadActual = Math.round(datosHorarios.relative_humidity_2m[horaActual]);
+        this.nubosidadActual = Math.round(datosHorarios.weather_code[horaActual]);
+        this.temperaturaActual = Math.round(datosHorarios.temperature_2m[horaActual]);
+    } else {
+        // Respaldo por si la API mandara menos de 24 horas (poco probable)
+        this.humedadActual = Math.round(datosHorarios.relative_humidity_2m[0]);
+        this.nubosidadActual = Math.round(datosHorarios.weather_code[0]);
+        this.temperaturaActual = Math.round(datosHorarios.temperature_2m[0]);
+    }
     const labels = datosHorarios.time.slice(0, 24).map((t: any) => {
       return new Date(t).toLocaleTimeString('es-MX', {
         hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' });
