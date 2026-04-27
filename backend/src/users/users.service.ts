@@ -74,7 +74,11 @@ export class UsersService {
       { username: loginTerm, active: true }
   ],
   //Sacar el rol de los usuarios
-  relations: ['role']
+  relations: {
+      role: {
+        permissions: true 
+      }
+    }
 
 });
 }

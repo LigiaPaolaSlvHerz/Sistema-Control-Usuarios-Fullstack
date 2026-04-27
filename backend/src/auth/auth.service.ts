@@ -12,7 +12,7 @@ export class AuthService {
   //Metodo Login
   async login(identifier: string, password: string) {
     const user = await this.usersService.findOneByLogin(identifier);
-
+    
     if (!user) {
       throw new UnauthorizedException('Usuario no existe');
     }
@@ -28,11 +28,15 @@ export class AuthService {
     if (!isMatch) {
       throw new UnauthorizedException('Password incorrecto');
     }
-
-    const payload = { sub: user.id, email: user.email, role: user.role.role };
+    const userPermissions = user.role?.permissions?.map(p => p.permission) || [];
+    if (!user.role) {
+      throw new UnauthorizedException('El usuario no tiene un rol asignado');
+    }
+    const payload = { sub: user.id, email: user.email, role: user.role.role, permissions: userPermissions };
     const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' }); 
 
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+    
     return {
       access_token: accessToken,
       refresh_token: refreshToken,
@@ -41,7 +45,8 @@ export class AuthService {
         username: user.username,
         first_name: user.first_name,
         last_name: user.last_name,
-        email: user.email
+        email: user.email,
+        permissions: userPermissions
       }
     };
   }

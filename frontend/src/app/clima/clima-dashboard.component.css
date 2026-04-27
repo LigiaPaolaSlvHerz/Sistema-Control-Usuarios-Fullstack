@@ -1,24 +1,22 @@
-
 ::ng-deep .p-dropdown {
-    width: auto !important;
-    min-width: 200px; /* Un tamaño mínimo para que no se vea minúsculo */
-    max-width: 350px; /* Para que si la colonia es muy larga, no rompa el diseño */
+  width: auto !important;
+  min-width: 200px; /* Un tamaño mínimo para que no se vea minúsculo */
+  max-width: 350px; /* Para que si la colonia es muy larga, no rompa el diseño */
 }
 
 /* Para que el texto interno no empuje demasiado */
 ::ng-deep .p-dropdown-label {
-    text-overflow: ellipsis;
-    overflow: hidden;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
-
 
 /* Clase para la tarjeta blanca */
 .chart-card {
-    min-height: 350px;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    margin-bottom: 10px; /* Evita que choquen con el borde de abajo */
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin-bottom: 10px; /* Evita que choquen con el borde de abajo */
 }
 
 /* El contenedor del canvas debe ocupar todo el espacio restante */
@@ -28,8 +26,7 @@
 }
 
 .chart-container {
-    position: relative;
-    width: 100%;
-    height: 300px;
+  position: relative;
+  width: 100%;
+  height: 300px;
 }
-
