@@ -15,6 +15,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
+import { HasPermissionDirective } from "../../directives/has-permission.directive";
 
 @Component({
   selector: 'app-gestion-roles',
@@ -33,7 +34,8 @@ import { ToastModule } from 'primeng/toast';
     DialogModule,
     ConfirmDialogModule,
     CheckboxModule,
-    ToastModule
+    ToastModule,
+    HasPermissionDirective
 ],
   providers: [MessageService],
   templateUrl: './gestionRoles.component.html',

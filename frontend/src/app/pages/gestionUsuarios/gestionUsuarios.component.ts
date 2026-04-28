@@ -14,6 +14,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { HasPermissionDirective } from "../../directives/has-permission.directive";
 
 @Component({
   selector: 'app-gestion-usuarios',
@@ -31,7 +32,8 @@ import { ToastModule } from 'primeng/toast';
     ButtonModule,
     DialogModule,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    HasPermissionDirective
 ],
   providers: [MessageService],
   templateUrl: './gestionUsuarios.component.html',
@@ -144,11 +146,16 @@ export class gestionUsuariosPage implements OnInit {
     const userLogueado = JSON.parse(localStorage.getItem('user') || '{}');
     const adminId = userLogueado.id;
 
-    if (this.isEditMode) {
+if (this.isEditMode) {
     // --- LÓGICA DE EDITAR ---
-    console.log('Intentando actualizar al ID:', this.usuarioIdAEditar);
+
+    // 1. Clonamos los datos para no afectar lo que el usuario ve en el modal
     const dataAEnviar = { ...this.nuevoUsuario, updated_by: adminId };
 
+    // 2. Si la contraseña viene vacía o son solo espacios, la eliminamos del envío
+    if (!dataAEnviar.password || dataAEnviar.password.trim() === '') {
+      delete dataAEnviar.password;
+    }
     this.usuarioService.updateUsuario(this.usuarioIdAEditar!, dataAEnviar).subscribe({
       next: (res) => {
         this.messageService.add({
@@ -156,7 +163,6 @@ export class gestionUsuariosPage implements OnInit {
         summary: 'Actualizado',
         detail: 'Los datos del usuario se actualizaron'
         });
-        console.log('Servidor respondió OK:', res);
         this.display = false;
         this.obtenerUsuariosDeBase();
         this.limpiarFormulario();
@@ -180,7 +186,6 @@ export class gestionUsuariosPage implements OnInit {
         detail: 'Usuario creado correctamente',
         life: 3000 // 3000 milisegundos = se quita solo en 3 segundos
         });
-        console.log('¡Usuario creado con éxito!');
         this.display = false; // Cerramos el modal
         this.obtenerUsuariosDeBase(); // Recargamos la tabla
         this.limpiarFormulario(); // Limpiamos los campos

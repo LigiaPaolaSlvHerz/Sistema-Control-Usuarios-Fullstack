@@ -1,10 +1,10 @@
 <div class="card p-4">
     <h2 class="text-center text-orange-600 font-bold mb-4">Administración de Usuarios</h2>
     <div class="flex justify-content-end mb-3">
-        <p-button label="Nuevo Usuario" icon="pi pi-user-plus" severity="success" (onClick)="showDialog()"></p-button>
+        <p-button *appHasPermission="'CREATE_USER'" label="Nuevo Usuario" icon="pi pi-user-plus" severity="success" (onClick)="showDialog()"></p-button>
     </div>
 
-    <p-dialog header="Registrar Nuevo Usuario" [(visible)]="display" [modal]="true" [style]="{ width: '30vw' }">
+    <p-dialog header="isEditMode ? 'Editar Usuario' : 'Registrar Nuevo Usuario'" [(visible)]="display" [modal]="true" [style]="{ width: '30vw' }">
         <div class="flex flex-column gap-3">
             <input pInputText placeholder="Nombre" [(ngModel)]="nuevoUsuario.first_name" />
             <input pInputText placeholder="Apellido Paterno" [(ngModel)]="nuevoUsuario.middle_name" />
@@ -79,8 +79,8 @@
                     <p-tag [value]="user.status | uppercase" [severity]="getSeverity(user.status)"></p-tag>
                 </td>
                 <td class="text-center">
-                    <p-button icon="pi pi-pencil" [rounded]="true" severity="warn" [outlined]="true" class="mr-2" label="Editar" (onClick)="editarUsuario(user)"></p-button>
-                    <p-button icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" label="Eliminar" (onClick)="confirmarEliminacion(user)"></p-button>
+                    <p-button *appHasPermission="'UPDATE_USER'" icon="pi pi-pencil" [rounded]="true" severity="warn" [outlined]="true" class="mr-2" label="Editar" (onClick)="editarUsuario(user)"></p-button>
+                    <p-button *appHasPermission="'DELETE_USER'" icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" label="Eliminar" (onClick)="confirmarEliminacion(user)"></p-button>
 
                 </td>
             </tr>

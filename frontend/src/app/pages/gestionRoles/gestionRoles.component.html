@@ -2,7 +2,7 @@
     <h2 class="text-center text-orange-600 font-bold mb-4">Administración de Roles</h2>
 
     <div class="flex justify-content-end mb-3">
-        <p-button label="Nuevo Rol" icon="pi pi-plus-circle" severity="success" (onClick)="showDialog()"></p-button>
+        <p-button *appHasPermission="'CREATE_ROLE'" label="Nuevo Rol" icon="pi pi-plus-circle" severity="success" (onClick)="showDialog()"></p-button>
     </div>
 
     <p-dialog [header]="isEditMode ? 'Editar Rol' : 'Registrar Nuevo Rol'" [(visible)]="display" [modal]="true" [style]="{ width: '500px' }">
@@ -59,8 +59,8 @@
             <td class="text-center">
                 <p-button icon="pi pi-eye" [rounded]="true" severity="info" [outlined]="true" class="mr-2" (onClick)="verPermisos(rol)"></p-button>
 
-                <p-button icon="pi pi-pencil" [rounded]="true" severity="warn" [outlined]="true" class="mr-2" (onClick)="editarRol(rol)"></p-button>
-                <p-button icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" (onClick)="confirmarEliminacion(rol)"></p-button>
+                <p-button *appHasPermission="'UPDATE_ROLE'" icon="pi pi-pencil" [rounded]="true" severity="warn" [outlined]="true" class="mr-2" (onClick)="editarRol(rol)"></p-button>
+                <p-button *appHasPermission="'DELETED_ROLE'" icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" (onClick)="confirmarEliminacion(rol)"></p-button>
             </td>
         </tr>
     </ng-template>

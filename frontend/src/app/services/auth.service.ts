@@ -45,21 +45,21 @@ export class AuthService {
 
 
 
-  getUserPermissions(): string[] {
-    const token = localStorage.getItem('access_token');
-    if (!token) return [];
+getUserPermissions(): string[] {
+  // Leemos el objeto 'user' del localStorage que ya confirmamos que existe
+  const userJson = localStorage.getItem('user');
+  if (!userJson) return [];
 
-    try {
-      const decoded: any = jwtDecode(token);
-      // Asegúrate que tu Backend mande un arreglo llamado 'permissions'
-      return decoded.permissions || [];
-    } catch (error) {
-      return [];
-    }
+  try {
+    const user = JSON.parse(userJson);
+    return user.permissions || []; // Aquí están tus 13 permisos que vimos en la foto
+  } catch (e) {
+    return [];
   }
+}
 
-  hasPermission(permission: string): boolean {
-    const permissions = this.getUserPermissions();
-    return permissions.includes(permission);
-  }
+hasPermission(permission: string): boolean {
+  const misPermisos = this.getUserPermissions();
+  return misPermisos.includes(permission);
+}
 }

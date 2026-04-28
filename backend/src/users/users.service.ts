@@ -56,12 +56,23 @@ export class UsersService {
   }
 
   async update(id: number, data: Partial<User>) {
-    if (data.password) {
+  // 1. Verificamos si la contraseña existe y no viene vacía
+  if (data.password && data.password.trim() !== '') {
+    // Si tiene contenido real, la hasheamos para guardarla segura
     data.password = await bcrypt.hash(data.password, 10);
+  } else {
+    // 2. ¡ESTA ES LA CLAVE! 
+    // Si viene vacía, usamos 'delete' para quitar la propiedad del objeto.
+    // Al no estar en el objeto 'data', TypeORM no la toca en la base de datos.
+    delete data.password;
   }
-    await this.userRepository.update(id, data);
-    return this.findOne(id);
-  }
+
+  // 3. Se actualiza solo lo que quedó en el objeto (nombre, email, etc.)
+  await this.userRepository.update(id, data);
+  
+  // 4. Retornamos el usuario ya actualizado para confirmación
+  return this.findOne(id);
+}
 
   async remove(id: number) {
     await this.userRepository.update(id, { active: false });

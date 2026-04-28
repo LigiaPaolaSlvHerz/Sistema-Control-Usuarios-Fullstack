@@ -14,6 +14,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { HasPermissionDirective } from "../../directives/has-permission.directive";
 
 @Component({
   selector: 'app-gestion-permisos',
@@ -31,7 +32,8 @@ import { ToastModule } from 'primeng/toast';
     ButtonModule,
     DialogModule,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    HasPermissionDirective
 ],
   providers: [MessageService],
   templateUrl: './gestionPermisos.component.html',
