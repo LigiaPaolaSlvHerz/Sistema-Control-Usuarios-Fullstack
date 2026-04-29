@@ -4,21 +4,21 @@
         <p-button *appHasPermission="'CREATE_USER'" label="Nuevo Usuario" icon="pi pi-user-plus" severity="success" (onClick)="showDialog()"></p-button>
     </div>
 
-    <p-dialog header="isEditMode ? 'Editar Usuario' : 'Registrar Nuevo Usuario'" [(visible)]="display" [modal]="true" [style]="{ width: '30vw' }">
-        <div class="flex flex-column gap-3">
-            <input pInputText placeholder="Nombre" [(ngModel)]="nuevoUsuario.first_name" />
-            <input pInputText placeholder="Apellido Paterno" [(ngModel)]="nuevoUsuario.middle_name" />
-            <input pInputText placeholder="Apellido Materno" [(ngModel)]="nuevoUsuario.last_name" />
-            <input pInputText placeholder="Username" [(ngModel)]="nuevoUsuario.username" />
-            <input pInputText placeholder="Email" [(ngModel)]="nuevoUsuario.email" />
-            <input pInputText type="password" placeholder="Password" [(ngModel)]="nuevoUsuario.password" />
+    <p-dialog [header]="isEditMode ? 'Editar Usuario' : 'Registrar Nuevo Usuario'" [(visible)]="display" [modal]="true" [style]="{ width: '30vw' }">
+        <form class="flex flex-column gap-3" #userForm="ngForm">
+            <input pInputText name="nombre" placeholder="Nombre" required [(ngModel)]="nuevoUsuario.first_name" />
+            <input pInputText name="apellidoP" placeholder="Apellido Paterno" required [(ngModel)]="nuevoUsuario.middle_name" />
+            <input pInputText name="apellidoM" placeholder="Apellido Materno" required [(ngModel)]="nuevoUsuario.last_name" />
+            <input pInputText name="name" placeholder="Username" required [(ngModel)]="nuevoUsuario.username" />
+            <input pInputText name="email" placeholder="Email" required [(ngModel)]="nuevoUsuario.email" />
+            <input pInputText name="pass" type="password" [required]="!isEditMode" placeholder="Password" [(ngModel)]="nuevoUsuario.password" />
 
-            <p-select [options]="rolesDisponibles" [(ngModel)]="nuevoUsuario.role_id" optionLabel="role" optionValue="id" placeholder="Seleccionar Rol" appendTo="body"></p-select>
+            <p-select name="rol" required [options]="rolesDisponibles" [(ngModel)]="nuevoUsuario.role_id" optionLabel="role" optionValue="id" placeholder="Seleccionar Rol" appendTo="body"></p-select>
 
             <div class="flex justify-content-end mt-2">
-                <p-button label="Guardar" icon="pi pi-check" (onClick)="guardarUsuario()"></p-button>
+                <p-button label="Guardar" icon="pi pi-check" (onClick)="guardarUsuario()" [disabled]="userForm.invalid"></p-button>
             </div>
-        </div>
+        </form>
     </p-dialog>
     <div style="width: 100%; overflow-x: auto;">
       <p-table

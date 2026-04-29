@@ -50,3 +50,35 @@
   color: #ffffff !important;
   font-weight: 500;
 }
+
+/* Esto quita el fondo blanco del Drawer y le pone tu verde */
+::ng-deep .p-drawer {
+    background-color: var(--verde-segiagua) !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+/* El header del drawer (donde está la X para cerrar) también debe ser verde */
+::ng-deep .p-drawer-header {
+    background-color: var(--verde-segiagua) !important;
+    color: white !important;
+    padding: 1rem !important;
+}
+
+/* El botón de cerrar (la X) que sea blanca */
+::ng-deep .p-drawer-close-button {
+    color: white !important;
+}
+
+/* Aseguramos que el contenido ocupe todo el alto */
+::ng-deep .p-drawer-content {
+    padding: 0 !important;
+    background-color: var(--verde-segiagua) !important;
+}
+
+/* Para que el sidebar original no aplaste el contenido en pantallas medianas */
+@media screen and (max-width: 991px) {
+    .layout-sidebar {
+        display: none !important; /* Forzamos que se esconda */
+    }
+}

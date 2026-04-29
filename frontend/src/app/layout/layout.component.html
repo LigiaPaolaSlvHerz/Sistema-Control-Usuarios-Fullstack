@@ -1,73 +1,92 @@
 <div class="layout-wrapper flex flex-column h-screen overflow-hidden">
 
-    <div class="layout-topbar flex align-items-center justify-content-between px-4 surface-card" style="border-bottom: 3px solid var(--naranja-login);">
+    <div class="layout-topbar flex align-items-center justify-content-between px-4 surface-card"
+         style="border-bottom: 3px solid var(--naranja-login); min-height: 70px;">
+
         <div class="flex align-items-center">
-            <!-- <i class="pi pi-bars text-2xl cursor-pointer mr-3 lg:hidden"></i> -->
-            <div class="flex align-items-center p-4 border-bottom-1 surface-border gap-3">
+            <p-button
+                icon="pi pi-bars"
+                (click)="visible = true"
+                [text]="true"
+                severity="secondary"
+                class="lg:hidden mr-2">
+            </p-button>
+
+            <div class="flex align-items-center py-2 gap-3">
                 <img src="/logosegiaguag.png" alt="Logo" style="width: 40px; border-radius: 8px;">
                 <span class="font-bold text-xl vertical-align-middle">SEGIAGUA</span>
             </div>
-
         </div>
 
         <div class="flex align-items-center gap-3">
             <p-button icon="pi pi-bell" [rounded]="true" [text]="true" severity="secondary"></p-button>
-            <p-button (click)="cerrarSesion()" label="Salir" icon="pi pi-sign-out" severity="danger" [outlined]="true" size="small"></p-button>
+            <p-button (click)="cerrarSesion()" label="Salir" icon="pi pi-sign-out"
+                      severity="danger" [outlined]="true" size="small"></p-button>
         </div>
     </div>
 
     <div class="flex flex-row flex-grow-1">
 
         <div class="layout-sidebar surface-section shadow-1 flex flex-column w-18rem hidden lg:flex">
-            <div class="flex align-items-center p-3 border-bottom-1 surface-border">
-              <div class="avatar-circle flex align-items-center justify-content-center border-circle font-bold mr-3"
-             style="width: 48px; height: 48px;">
-                {{ userInitial }}
-              </div>
-
-              <div class="flex flex-column">
-                <span class="font-bold text-xl text-primary line-height-2">
-                  {{ userName }}
-                </span>
-
-                <span class="text-sm text-slate-500 white-space-nowrap overflow-hidden text-overflow-ellipsis"
-                      style="max-width: 150px;">
-                  {{ fullName }}
-                </span>
-              </div>
-            </div>
-
-            <div class="p-3 flex-grow-1">
-                <ul class="list-none p-0 m-0">
-                    <li class="mb-2">
-                        <a routerLink="/principal" class="menu-item flex align-items-center p-3 cursor-pointer no-underline">
-                            <i class="pi pi-home mr-2 custom-icon"></i>
-                            <span class="font-medium">Inicio</span>
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a routerLink="/usuarios" class="menu-item flex align-items-center p-3 cursor-pointer no-underline">
-                            <i class="pi pi-users mr-2 custom-icon"></i>
-                            <span class="font-medium">Gestión de Usuarios</span>
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a routerLink="/roles" class="menu-item flex align-items-center p-3 cursor-pointer no-underline">
-                            <i class="pi pi-shield mr-2 custom-icon"></i> <span class="font-medium">Gestión de Roles</span>
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a routerLink="/permisos" class="menu-item flex align-items-center p-3 cursor-pointer no-underline">
-                            <i class="pi pi-pen-to-square mr-2 custom-icon"></i> <span class="font-medium">Gestión de Permisos</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <ng-container *ngTemplateOutlet="menuContent"></ng-container>
         </div>
 
-        <main class="flex-grow-1 p-4" style="overflow-y: auto;">
+        <p-drawer [(visible)]="visible" [modal]="true" class="custom-drawer">
+            <div class="h-full flex flex-column" style="background-color: var(--verde-segiagua);">
+                <ng-container *ngTemplateOutlet="menuContent"></ng-container>
+            </div>
+        </p-drawer>
+
+        <main class="flex-grow-1 p-4" style="overflow-y: auto; background-color: var(--fondo-claro);">
             <router-outlet></router-outlet>
         </main>
 
     </div>
 </div>
+
+<ng-template #menuContent>
+    <div class="flex align-items-center p-3 border-bottom-1 surface-border" style="border-color: rgba(255,255,255,0.2) !important;">
+        <div class="avatar-circle flex align-items-center justify-content-center border-circle font-bold mr-3"
+             style="width: 48px; height: 48px;">
+            {{ userInitial }}
+        </div>
+
+        <div class="flex flex-column">
+            <span class="font-bold text-xl text-white">
+                {{ userName }}
+            </span>
+            <span class="text-sm text-white opacity-70">
+                {{ fullName }}
+            </span>
+        </div>
+    </div>
+
+    <div class="p-3 flex-grow-1">
+        <ul class="list-none p-0 m-0">
+            <li class="mb-2">
+                <a routerLink="/principal" (click)="visible = false" class="menu-item flex align-items-center p-3 cursor-pointer no-underline">
+                    <i class="pi pi-home mr-2 text-white"></i>
+                    <span class="font-medium text-white">Inicio</span>
+                </a>
+            </li>
+            <li class="mb-2">
+                <a routerLink="/usuarios" (click)="visible = false" class="menu-item flex align-items-center p-3 cursor-pointer no-underline">
+                    <i class="pi pi-users mr-2 text-white"></i>
+                    <span class="font-medium text-white">Gestión de Usuarios</span>
+                </a>
+            </li>
+            <li class="mb-2">
+                <a routerLink="/roles" (click)="visible = false" class="menu-item flex align-items-center p-3 cursor-pointer no-underline">
+                    <i class="pi pi-shield mr-2 text-white"></i>
+                    <span class="font-medium text-white">Gestión de Roles</span>
+                </a>
+            </li>
+            <li class="mb-2">
+                <a routerLink="/permisos" (click)="visible = false" class="menu-item flex align-items-center p-3 cursor-pointer no-underline">
+                    <i class="pi pi-pen-to-square mr-2 text-white"></i>
+                    <span class="font-medium text-white">Gestión de Permisos</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</ng-template>

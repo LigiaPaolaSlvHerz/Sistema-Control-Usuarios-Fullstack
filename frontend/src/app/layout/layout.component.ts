@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../services/auth.service';
 import { DrawerModule } from 'primeng/drawer';
+import { HasPermissionDirective } from '../directives/has-permission.directive';
 @Component({
   selector: 'app-layout',
   standalone: true,
@@ -12,6 +13,8 @@ import { DrawerModule } from 'primeng/drawer';
     RouterOutlet,
     RouterLink,
     ButtonModule,
+    DrawerModule,
+    HasPermissionDirective
   ],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.css']
@@ -20,6 +23,7 @@ export class LayoutComponent {
   userName: string = 'User';
   fullName: string = 'Full Name';
   userInitial: string = 'U';
+  visible: boolean = false;
   private authService = inject(AuthService);
 
   ngOnInit() {
