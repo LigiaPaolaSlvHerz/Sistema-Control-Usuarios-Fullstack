@@ -10,6 +10,8 @@
     height: calc(100vh - 70px);
     background-color: var(--verde-segiagua) !important;
     color: white !important;
+    z-index: 998;
+    transition: transform 0.3s ease-in-out
 }
 
 .router-link-active {
@@ -51,34 +53,34 @@
   font-weight: 500;
 }
 
-/* Esto quita el fondo blanco del Drawer y le pone tu verde */
-::ng-deep .p-drawer {
-    background-color: var(--verde-segiagua) !important;
-    border: none !important;
-    padding: 0 !important;
-}
-
-/* El header del drawer (donde está la X para cerrar) también debe ser verde */
-::ng-deep .p-drawer-header {
-    background-color: var(--verde-segiagua) !important;
-    color: white !important;
-    padding: 1rem !important;
-}
-
-/* El botón de cerrar (la X) que sea blanca */
-::ng-deep .p-drawer-close-button {
-    color: white !important;
-}
-
-/* Aseguramos que el contenido ocupe todo el alto */
-::ng-deep .p-drawer-content {
-    padding: 0 !important;
-    background-color: var(--verde-segiagua) !important;
-}
-
-/* Para que el sidebar original no aplaste el contenido en pantallas medianas */
 @media screen and (max-width: 991px) {
     .layout-sidebar {
-        display: none !important; /* Forzamos que se esconda */
+        position: fixed; /* Lo despegamos de la estructura en móviles */
+        left: 0;
+        top: 70px;
+        /* Inicialmente está escondido a la izquierda fuera de la pantalla */
+        transform: translateX(-100%);
     }
+
+    /* Cuando la variable 'visible' es true, le agregamos esta clase para que entre */
+    .layout-sidebar.active-mobile {
+        transform: translateX(0);
+    }
+}
+
+/* EL FONDO OSCURO (OVERLAY) SUTIL */
+.layout-mask {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 70px);
+    background-color: rgba(0, 0, 0, 0.3); /* 0.3 es mucho menos oscuro que el de PrimeNG */
+    z-index: 997; /* Justo debajo del sidebar pero encima del contenido */
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

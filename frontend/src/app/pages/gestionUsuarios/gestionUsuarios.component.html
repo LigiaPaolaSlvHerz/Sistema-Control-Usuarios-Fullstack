@@ -1,4 +1,4 @@
-<div class="card p-4">
+<div class="card p-2 md:p-4 shadow-2" style="min-height: calc(100vh - 120px); display: flex; flex-direction: column;">
     <h2 class="text-center text-orange-600 font-bold mb-4">Administración de Usuarios</h2>
     <div class="flex justify-content-end mb-3">
         <p-button *appHasPermission="'CREATE_USER'" label="Nuevo Usuario" icon="pi pi-user-plus" severity="success" (onClick)="showDialog()"></p-button>
@@ -20,7 +20,7 @@
             </div>
         </form>
     </p-dialog>
-    <div style="width: 100%; overflow-x: auto;">
+    <div class="flex-grow-1" style="width: 100%; overflow: hidden; display: flex; flex-direction: column;">
       <p-table
           #dt
           [value]="usuarios"
@@ -30,7 +30,7 @@
           [globalFilterFields]="['username', 'nombre', 'apellido_p', 'rol']"
           [scrollable]="true"
           scrollHeight="flex"
-          scrollDirection="horizontal"
+          scrollDirection="both"
           styleClass="p-datatable-gridlines p-datatable-striped"
           [tableStyle]="{ 'min-width': '60rem' }"
           responsiveLayout="scroll"

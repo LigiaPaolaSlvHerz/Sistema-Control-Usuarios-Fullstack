@@ -1,4 +1,4 @@
-<div class="layout-wrapper flex flex-column h-screen overflow-hidden">
+<div class="layout-wrapper flex flex-column h-screen overflow-hidden relative">
 
     <div class="layout-topbar flex align-items-center justify-content-between px-4 surface-card"
          style="border-bottom: 3px solid var(--naranja-login); min-height: 70px;">
@@ -6,7 +6,7 @@
         <div class="flex align-items-center">
             <p-button
                 icon="pi pi-bars"
-                (click)="visible = true"
+                (click)="visible = !visible"
                 [text]="true"
                 severity="secondary"
                 class="lg:hidden mr-2">
@@ -25,19 +25,22 @@
         </div>
     </div>
 
-    <div class="flex flex-row flex-grow-1">
+    <div class="flex flex-row flex-grow-1 relative">
 
-        <div class="layout-sidebar surface-section shadow-1 flex flex-column w-18rem hidden lg:flex">
+        <div *ngIf="visible"
+             class="layout-mask lg:hidden"
+             (click)="visible = false">
+        </div>
+
+        <!-- SIDEBAR ÚNICO (Para PC y Móvil) -->
+        <!-- En PC (lg) siempre está activo. En móvil depende de 'active-mobile' -->
+        <div class="layout-sidebar surface-section shadow-1 flex flex-column w-18rem flex-shrink-0"
+             [ngClass]="{'active-mobile': visible}">
+
             <ng-container *ngTemplateOutlet="menuContent"></ng-container>
         </div>
 
-        <p-drawer [(visible)]="visible" [modal]="true" class="custom-drawer">
-            <div class="h-full flex flex-column" style="background-color: var(--verde-segiagua);">
-                <ng-container *ngTemplateOutlet="menuContent"></ng-container>
-            </div>
-        </p-drawer>
-
-        <main class="flex-grow-1 p-4" style="overflow-y: auto; background-color: var(--fondo-claro);">
+        <main class="flex-grow-1 p-3 md:p-4" style="overflow-y: auto; background-color: var(--fondo-claro); height: 100%; ">
             <router-outlet></router-outlet>
         </main>
 

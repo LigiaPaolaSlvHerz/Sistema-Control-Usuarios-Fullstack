@@ -12,11 +12,10 @@
 
 /* Clase para la tarjeta blanca */
 .chart-card {
-  min-height: 350px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  margin-bottom: 10px; /* Evita que choquen con el borde de abajo */
+  margin-bottom: 20px; /* Evita que choquen con el borde de abajo */
 }
 
 /* El contenedor del canvas debe ocupar todo el espacio restante */
@@ -28,5 +27,19 @@
 .chart-container {
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 400px;
+}
+
+/* Para Celulares Pequeños (Menos de 768px) */
+@media screen and (max-width: 767px) {
+  .chart-container {
+    height: 380px;
+  }
+}
+
+/* Para Computadoras (Pantalla Completa - lg en PrimeFlex es 992px) */
+@media screen and (min-width: 992px) {
+  .chart-container {
+    height: 500px;
+  }
 }
